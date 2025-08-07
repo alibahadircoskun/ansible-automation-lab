@@ -46,7 +46,6 @@ network-automation-lab/
 │   ├── site.yaml          # Main playbook for device configuration
 │   └── verify.yaml        # Playbook for post-deployment verification tasks
 ├── group_vars/            # Group variables for devices
-│   ├── routers.yaml
-│   └── switches.yaml
+│   ├── cisco.yaml
 ├── README.md              # This file
 └── images/                # Optional folder for topology diagrams and screenshots
