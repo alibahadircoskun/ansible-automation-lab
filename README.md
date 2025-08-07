@@ -48,4 +48,5 @@ network-automation-lab/
 ├── group_vars/            # Group variables for devices
 │   ├── cisco.yaml
 ├── README.md              # This file
+├── notes/                 # Personal notes, explanations, and learning resources related to this lab
 └── images/                # Optional folder for topology diagrams and screenshots
