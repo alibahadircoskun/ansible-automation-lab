@@ -31,7 +31,7 @@ The lab network consists of:
 - **Switches:** SW1, SW2  
 - **Connectivity:** Routers connected to switches with appropriate VLAN segmentation for testing configuration deployment  
 
-> _Topology diagram will be added soon to visualize the setup._
+images/automation.png
 
 ---
 
