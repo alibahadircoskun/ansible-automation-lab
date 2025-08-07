@@ -25,6 +25,11 @@
           - switchport mode access
           - switchport access vlan 10
           - no shutdown
+        parents: [interface GigabitEthernet0/3]
+        lines:
+          - switchport mode access
+          - switchport access vlan 20
+          - no shutdown
 
     - name: Configure switch interface GigabitEthernet0/0 as trunk
       when: inventory_hostname in ['SW1', 'SW2']
