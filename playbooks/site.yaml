@@ -1,0 +1,87 @@
+- name: Configure Routers and Switches
+  hosts: all
+  gather_facts: no
+  tasks:
+
+    - name: Disable paging
+      cisco.ios.ios_command:
+        commands:
+          - terminal length 0
+
+    - name: Configure VLANs on switches
+      when: inventory_hostname in ['SW1', 'SW2']
+      cisco.ios.ios_config:
+        lines:
+          - vlan 10
+          - name Users
+          - vlan 20
+          - name Servers
+
+    - name: Configure switch interface GigabitEthernet0/2 as access VLAN 10
+      when: inventory_hostname in ['SW1', 'SW2']
+      cisco.ios.ios_config:
+        parents: [interface GigabitEthernet0/2]
+        lines:
+          - switchport mode access
+          - switchport access vlan 10
+          - no shutdown
+
+    - name: Configure switch interface GigabitEthernet0/0 as trunk
+      when: inventory_hostname in ['SW1', 'SW2']
+      cisco.ios.ios_config:
+        parents: [interface GigabitEthernet0/0]
+        lines:
+          - switchport trunk encapsulation dot1q
+          - switchport mode trunk
+          - no shutdown
+
+    - name: Configure router interfaces on R1
+      when: inventory_hostname == 'R1'
+      cisco.ios.ios_config:
+        config:
+          - parents: [interface GigabitEthernet0/0]
+            lines:
+              - ip address 172.16.1.1 255.255.255.0
+              - no shutdown
+          - parents: [interface GigabitEthernet0/1]
+            lines:
+              - ip address 10.0.0.1 255.255.255.252
+              - no shutdown
+
+    - name: Configure EIGRP on R1
+      when: inventory_hostname == 'R1'
+      cisco.ios.ios_config:
+        config:
+          - parents: ['router eigrp 1']
+            lines:
+              - network 172.16.0.0 0.0.255.255
+              - network 10.0.0.0
+              - no auto-summary
+
+    - name: Configure router interfaces on R2
+      when: inventory_hostname == 'R2'
+      cisco.ios.ios_config:
+        config:
+          - parents: [interface GigabitEthernet0/0]
+            lines:
+              - ip address 172.16.2.1 255.255.255.0
+              - no shutdown
+          - parents: [interface GigabitEthernet0/1]
+            lines:
+              - ip address 10.0.0.2 255.255.255.252
+              - no shutdown
+
+    - name: Configure EIGRP on R2
+      when: inventory_hostname == 'R2'
+      cisco.ios.ios_config:
+        config:
+          - parents: ['router eigrp 1']
+            lines:
+              - network 172.16.0.0 0.0.255.255
+              - network 10.0.0.0
+              - no auto-summary
+
+    - name: Save running configuration to startup config
+      cisco.ios.ios_command:
+        commands:
+          - write memory

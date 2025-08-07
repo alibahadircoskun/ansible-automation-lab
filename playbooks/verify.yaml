@@ -1,0 +1,56 @@
+---
+- name: Verify network device configurations
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Disable paging on devices
+      cisco.ios.ios_command:
+        commands:
+          - terminal length 0
+
+    - name: Show VLAN brief (switches)
+      when: inventory_hostname in ['SW1', 'SW2']
+      cisco.ios.ios_command:
+        commands:
+          - show vlan brief
+      register: vlan_output
+
+    - name: Display VLAN brief output
+      when: inventory_hostname in ['SW1', 'SW2']
+      debug:
+        var: vlan_output.stdout_lines
+
+    - name: Show interface status
+      cisco.ios.ios_command:
+        commands:
+          - show ip interface brief
+      register: int_br_output
+
+    - name: Display interface brief output
+      debug:
+        var: int_br_output.stdout_lines
+
+    - name: Show EIGRP neighbors (routers)
+      when: inventory_hostname in ['R1', 'R2']
+      cisco.ios.ios_command:
+        commands:
+          - show ip eigrp neighbors
+      register: eigrp_neighbors
+
+    - name: Display EIGRP neighbors
+      when: inventory_hostname in ['R1', 'R2']
+      debug:
+        var: eigrp_neighbors.stdout_lines
+
+    - name: Show EIGRP topology (routers)
+      when: inventory_hostname in ['R1', 'R2']
+      cisco.ios.ios_command:
+        commands:
+          - show ip eigrp topology
+      register: eigrp_topology
+
+    - name: Display EIGRP topology
+      when: inventory_hostname in ['R1', 'R2']
+      debug:
+        var: eigrp_topology.stdout_lines
