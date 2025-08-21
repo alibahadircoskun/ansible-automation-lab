@@ -35,18 +35,3 @@ The lab network consists of:
 
 ---
 
-## Repository Structure
-
-```plaintext
-network-automation-lab/
-├── ansible.cfg            # Ansible configuration file
-├── inventory/             # Inventory with device IPs and connection variables
-│   └── hosts.yaml
-├── playbooks/             # Playbooks directory
-│   ├── site.yaml          # Main playbook for device configuration
-│   └── verify.yaml        # Playbook for post-deployment verification tasks
-├── group_vars/            # Group variables for devices
-│   ├── cisco.yaml
-├── README.md              # This file
-├── notes/                 # Personal notes, explanations, and learning resources related to this lab
-└── images/                # Folder for topology diagrams and screenshots
